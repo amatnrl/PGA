@@ -41,13 +41,9 @@ class AuthGroups extends ShieldAuthGroups
      * @see https://codeigniter4.github.io/shield/quick_start_guide/using_authorization/#change-available-groups for more info
      */
     public array $groups = [
-        'superadmin' => [
-            'title'       => 'Super Admin',
-            'description' => 'Akses penuh ke seluruh sistem, termasuk user & permission management.',
-        ],
         'admin' => [
             'title'       => 'Admin',
-            'description' => 'Akses operasional harian: kelola produk, konten, pesan, dan pengaturan.',
+            'description' => 'Akses penuh ke seluruh sistem: produk, konten, pesan, pengaturan, user & permission management.',
         ],
         'editor' => [
             'title'       => 'Editor',
@@ -92,7 +88,7 @@ class AuthGroups extends ShieldAuthGroups
      * This defines group-level permissions.
      */
     public array $matrix = [
-        'superadmin' => [
+        'admin' => [
             'admin.*',
             'products.*',
             'insights.*',
@@ -110,22 +106,6 @@ class AuthGroups extends ShieldAuthGroups
             'permissions.*',
             'backups.*',
             'analytics.*',
-        ],
-        'admin' => [
-            'admin.access',
-            'products.manage',
-            'insights.manage',
-            'recipes.manage',
-            'articles.manage',
-            'activities.manage',
-            'messages.manage',
-            'partners.manage',
-            'testimonials.manage',
-            'faqs.manage',
-            'banners.manage',
-            'seo.manage',
-            'settings.manage',
-            'analytics.view',
         ],
         'editor' => [
             'admin.access',

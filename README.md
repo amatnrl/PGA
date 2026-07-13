@@ -1,69 +1,104 @@
-# CodeIgniter 4 Application Starter
+<div align="center">
+  <img src=".github/assets/logo.webp" alt="Rumah Kelinci — PT. Pancaran Gemilang Abadi" width="160">
 
-## What is CodeIgniter?
+  # PGA — Corporate Website & CMS
+  ### PT. Pancaran Gemilang Abadi (Rumah Kelinci)
+</div>
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Tentang Project
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Website korporat sekaligus panel admin (CMS) untuk **PT. Pancaran Gemilang Abadi**. Aplikasi ini terdiri dari dua sisi:
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- **Website publik** — profil perusahaan, katalog produk, recipe, baking insight, artikel, activity (event/CSR/seminar/workshop/pameran), galeri, partner, testimonial, FAQ, dan halaman kontak.
+- **Admin panel (CMS)** — dashboard untuk mengelola seluruh konten di atas, ditambah manajemen user & permission (role-based access control), pengaturan perusahaan, SEO, banner, backup, dan visitor analytics.
 
-## Installation & updates
+## Teknologi yang Digunakan
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+**Backend**
+- [PHP 8.2+](https://www.php.net/)
+- [CodeIgniter 4](https://codeigniter.com/) — framework utama
+- [CodeIgniter Shield](https://github.com/codeigniter4/shield) — autentikasi & otorisasi (role/permission based)
+- MySQL — database (via MySQLi driver)
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+**Frontend**
+- [Vite](https://vitejs.dev/) — build tool & dev server
+- [Tailwind CSS](https://tailwindcss.com/) — styling
+- [GSAP](https://gsap.com/) & [AOS](https://michalsnik.github.io/aos/) — animasi
+- [Swiper](https://swiperjs.com/) — carousel/slider
+- [TinyMCE](https://www.tiny.cloud/) — rich text editor (admin CMS)
 
-## Setup
+**Infrastruktur**
+- aaPanel — server management panel
+- Cloudflare Tunnel — expose aplikasi ke internet tanpa membuka port publik
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## Struktur Peran (Role)
 
-## Important Change with index.php
+Sistem menggunakan satu peran administratif utama:
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+| Role | Akses |
+|---|---|
+| `admin` | Akses penuh: seluruh konten, user & permission management, pengaturan, backup, analytics |
+| `editor` | Kelola konten (produk, insight, recipe, article, activity) tanpa akses user & pengaturan inti |
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## Instalasi & Setup Lokal
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### Prasyarat
+- PHP >= 8.2 (ekstensi `intl`, `mbstring`, `mysqlnd`)
+- Composer
+- Node.js & npm
+- MySQL
 
-## Repository Management
+### Langkah
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+```bash
+# 1. Install dependency PHP
+composer install
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+# 2. Install dependency frontend
+npm install
 
-## Server Requirements
+# 3. Salin & sesuaikan environment
+cp env .env
+# atur app.baseURL dan kredensial database.default.* di .env
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+# 4. Jalankan migrasi database
+php spark migrate
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+# 5. Build asset frontend
+npm run build
+# atau untuk mode development dengan hot-reload:
+npm run dev
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+# 6. Jalankan development server
+php spark serve
+```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+Buat akun admin pertama:
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+```bash
+php spark shield:user create -e admin@pga.co.id -g admin
+```
+
+## Struktur Direktori Penting
+
+```
+app/
+├── Controllers/
+│   ├── Admin/      # Controller CMS (dashboard, produk, konten, user, settings, dll)
+│   └── Site/       # Controller website publik
+├── Models/
+├── Views/
+│   ├── admin/      # Tampilan CMS
+│   └── site/       # Tampilan website publik
+resources/
+├── css/            # Sumber Tailwind CSS (admin & site)
+└── js/             # Sumber JavaScript (admin & site)
+public/
+└── build/          # Hasil build asset (Vite)
+```
+
+## Deployment
+
+Aplikasi berjalan di server melalui **aaPanel** (Nginx + PHP-FPM + MySQL) dan diekspos ke internet melalui **Cloudflare Tunnel**, tanpa perlu membuka port publik langsung ke server.

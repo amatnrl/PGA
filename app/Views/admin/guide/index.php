@@ -110,7 +110,7 @@ $sections = [
         'items' => [
             [
                 'title' => 'User Management', 'url' => 'admin/users', 'icon' => 'user',
-                'desc'  => 'Kelola akun yang boleh masuk ke admin panel, beserta perannya: Superadmin, Admin, atau Editor — masing-masing punya hak akses menu yang berbeda.',
+                'desc'  => 'Kelola akun yang boleh masuk ke admin panel, beserta perannya: Admin atau Editor — masing-masing punya hak akses menu yang berbeda.',
                 'steps' => ['Tambah user baru dengan username, email, password, dan pilih perannya (group).', 'Edit/hapus user yang sudah tidak aktif bekerja.', 'Berikan peran "Editor" untuk staf yang hanya boleh mengelola konten, bukan setting inti.'],
                 'live'  => 'Tidak tampil di website — murni mengatur siapa yang boleh mengakses admin panel ini.',
             ],

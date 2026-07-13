@@ -9,7 +9,7 @@ use CodeIgniter\Shield\Models\UserModel;
 class UserController extends AdminBaseController
 {
     private UserModel $model;
-    private array $groups = ['superadmin', 'admin', 'editor'];
+    private array $groups = ['admin', 'editor'];
 
     public function __construct()
     {
