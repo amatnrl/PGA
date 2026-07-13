@@ -1,0 +1,957 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  letter-spacing: -0.005em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Sora', 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@keyframes scroll-loop {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.partner-slider {
+  animation: scroll-loop 25s linear infinite;
+  width: max-content;
+}
+
+.partner-slider:hover {
+  animation-play-state: paused;
+}
+
+/* 3D testimonial marquee: tilted stage with columns of cards scrolling
+   vertically in alternating directions (continuous loop, pause on hover). */
+.tmarquee-tilt {
+  transform: perspective(1400px) rotateX(20deg) rotateY(10deg) rotateZ(-20deg) scale(1.1);
+  transform-style: preserve-3d;
+}
+
+.tmarquee-col {
+  animation: tmarquee-up var(--tmarquee-duration, 28s) linear infinite;
+}
+.tmarquee-col.tmarquee-reverse {
+  animation-name: tmarquee-down;
+}
+.tmarquee-col-mask:hover .tmarquee-col {
+  animation-play-state: paused;
+}
+
+@keyframes tmarquee-up {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+@keyframes tmarquee-down {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+
+.tmarquee-card {
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.tmarquee-card:hover {
+  transform: translateZ(20px) scale(1.03);
+  box-shadow: 0 18px 30px -16px rgba(0, 0, 0, .25);
+}
+
+@media (max-width: 768px) {
+  .tmarquee-tilt {
+    transform: perspective(1000px) rotateX(14deg) rotateY(8deg) rotateZ(-14deg) scale(1.08);
+  }
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Sticky header transition */
+[data-site-header] {
+  transition: box-shadow .3s ease, background-color .3s ease, backdrop-filter .3s ease;
+  background-color: rgba(255, 255, 255, .55);
+}
+[data-site-header].is-scrolled {
+  box-shadow: 0 12px 34px -14px rgba(0, 0, 0, .22);
+  background-color: rgba(255, 255, 255, .85);
+}
+
+/* Inner pages (everything except Home) sit right on top of the solid red
+   page-header banner: start fully opaque so it doesn't look muddy over red,
+   then ease into the regular translucent look once scrolled past it. */
+[data-site-header][data-page-type="inner"] {
+  background-color: #fff;
+}
+[data-site-header][data-page-type="inner"].is-scrolled {
+  background-color: rgba(255, 255, 255, .55);
+  box-shadow: 0 12px 34px -14px rgba(0, 0, 0, .22);
+}
+
+/* Header wrap: hide-up, then reveal-and-freeze on first scroll */
+[data-site-header-wrap] {
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .35s ease;
+}
+[data-site-header-wrap].header-hide {
+  transform: translateY(-130%);
+  opacity: 0;
+}
+[data-site-header-wrap].header-reveal {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  border-radius: 9999px;
+  padding: .5rem 1.05rem;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #D60000;
+  transition: color .2s ease;
+}
+.nav-link:hover {
+  color: #A00000;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 1.05rem;
+  right: 1.05rem;
+  bottom: .3rem;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+.nav-link-icon {
+  display: inline-flex;
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.nav-link:hover .nav-link-icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.featured-tab-btn {
+  border-radius: 9999px;
+  padding: .5rem 1.1rem;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: #4B4B4B;
+  background-color: #F3F4F6;
+  transition: background-color .2s ease, color .2s ease;
+}
+.featured-tab-btn:hover {
+  background-color: rgba(214, 0, 0, .1);
+  color: #D60000;
+}
+.featured-tab-btn.is-active {
+  background-color: #D60000;
+  color: #fff;
+}
+
+/* Featured products: filter fade/scale in-out animation */
+[data-featured-card] {
+  animation-fill-mode: both;
+}
+[data-featured-card].featured-card-out {
+  animation: featured-card-out .2s ease forwards;
+}
+[data-featured-card].featured-card-in {
+  animation: featured-card-in .4s cubic-bezier(.22, .9, .3, 1.2) both;
+}
+@keyframes featured-card-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 0; transform: scale(.92) translateY(8px); }
+}
+@keyframes featured-card-in {
+  from { opacity: 0; transform: scale(.92) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Decorative section motifs */
+.section-motif {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.section-motif svg {
+  position: absolute;
+}
+.bg-motif-dots {
+  background-image: radial-gradient(rgba(255,255,255,.35) 1.5px, transparent 1.5px);
+  background-size: 18px 18px;
+}
+.bg-motif-dots-dark {
+  background-image: radial-gradient(rgba(214,0,0,.12) 1.5px, transparent 1.5px);
+  background-size: 18px 18px;
+}
+
+/* Swiper brand theming: red dot + surrounding ring on the active bullet */
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #D60000;
+  opacity: .35;
+  margin: 0 5px !important;
+  transition: opacity .3s ease, box-shadow .3s ease, transform .3s ease;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px rgba(214, 0, 0, .18), 0 0 0 5px rgba(214, 0, 0, .55);
+}
+
+/* Hero pagination: same red-dot + ring treatment, tuned for a photo background */
+.hero-pagination .swiper-pagination-bullet {
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  opacity: .6;
+  margin: 0 6px !important;
+}
+.hero-pagination .swiper-pagination-bullet-active {
+  background: #D60000;
+  opacity: 1;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .85), 0 0 0 5px rgba(214, 0, 0, .65);
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #D60000;
+  --swiper-navigation-size: 22px;
+}
+
+/* Generic round arrow button for custom carousels (e.g. insight slider) */
+.carousel-arrow-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 9999px;
+  background: #fff;
+  border: 1px solid #F3D7D7;
+  color: #D60000;
+  box-shadow: 0 8px 18px -10px rgba(214, 0, 0, .35);
+  transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+.carousel-arrow-btn:hover {
+  background: #D60000;
+  color: #fff;
+  transform: scale(1.08);
+}
+.carousel-arrow-btn:active {
+  transform: scale(.96);
+}
+.carousel-arrow-btn svg {
+  transition: transform .2s ease;
+}
+.carousel-arrow-btn:hover svg {
+  transform: translateX(2px);
+}
+.carousel-arrow-btn[data-scroll-dir="prev"]:hover svg {
+  transform: translateX(-2px);
+}
+
+/* Buttons with an icon: the icon nudges on hover for a subtle, lively feel */
+.btn-icon svg {
+  transition: transform .25s ease;
+}
+.btn-icon:hover svg {
+  transform: translateX(3px);
+}
+.btn-icon-circle:hover svg {
+  transform: scale(1.15) rotate(6deg);
+}
+
+/* "Why us" feature card: border sweep + icon pop on hover */
+.why-card {
+  transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+.why-card:hover {
+  transform: translateY(-4px) rotate(-0.4deg);
+  border-color: rgba(214, 0, 0, .25);
+  box-shadow: 0 22px 40px -22px rgba(214, 0, 0, .28);
+}
+.why-card .why-card-motif {
+  transition: transform .5s ease, background-color .5s ease;
+}
+.why-card:hover .why-card-motif {
+  transform: scale(1.6);
+  background-color: rgba(214, 0, 0, .09);
+}
+.why-card:hover img {
+  transform: scale(1.08);
+}
+.why-card img { transition: transform .4s ease; }
+
+/* Card hover lift + image zoom helpers */
+.hover-lift {
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 40px -20px rgba(0, 0, 0, .25);
+}
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform .5s ease;
+}
+.img-zoom:hover img {
+  transform: scale(1.07);
+}
+
+/* Footer wave divider: two looping layers drifting at different speeds */
+@keyframes wave-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.footer-wave {
+  width: 100%;
+  display: block;
+}
+.footer-wave-back {
+  animation: wave-drift 14s linear infinite;
+}
+.footer-wave-front {
+  animation: wave-drift 9s linear infinite reverse;
+}
+
+.footer-social-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.75rem;
+  width: 2.75rem;
+  border-radius: 9999px;
+  background-color: #fff;
+  color: #D60000;
+  box-shadow: 0 8px 16px -8px rgba(0, 0, 0, .35);
+  transition: background-color .2s ease, transform .2s ease, color .2s ease;
+}
+
+.footer-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  white-space: nowrap;
+  border-radius: .4rem;
+  background-color: #1A1A1A;
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 600;
+  padding: .3rem .6rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.footer-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #1A1A1A;
+}
+.footer-social-btn.group:hover .footer-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.footer-social-btn:hover {
+  background-color: #1A1A1A;
+  color: #fff;
+  transform: translateY(-3px) scale(1.05);
+}
+.footer-social-btn svg {
+  transition: transform .25s ease;
+}
+.footer-social-btn:hover svg {
+  transform: scale(1.12) rotate(-6deg);
+}
+
+.footer-contact-icon {
+  display: inline-flex;
+  height: 1.9rem;
+  width: 1.9rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, .14);
+  flex-shrink: 0;
+}
+
+/* Explore content card: arrow pop + accent bar hover */
+.content-card {
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.content-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 38px -20px rgba(0, 0, 0, .25);
+}
+
+/* Recipe cards (product detail page): a playful tilt-and-pop, with a red
+   shape peeking out from behind instead of a drop shadow. */
+.recipe-carousel .content-card {
+  position: relative;
+  z-index: 1;
+  transition: transform .4s cubic-bezier(.22, 1, .36, 1), border-color .4s ease;
+}
+.recipe-carousel .content-card:hover {
+  transform: translateY(-8px) rotate(-1.5deg) scale(1.03);
+  border-color: rgba(214, 0, 0, .3);
+}
+.recipe-card-ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50% 1.25rem 1.25rem 1.25rem;
+  background: linear-gradient(135deg, #D60000, #A00000);
+  opacity: 0;
+  transform: scale(.88) rotate(0deg) translate(0, 0);
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .45s ease;
+}
+.recipe-card-wrap:hover .recipe-card-ghost {
+  opacity: 1;
+  transform: scale(.95) rotate(6deg) translate(10px, 12px);
+}
+
+/* Partner logo card: uniform size, lift + reveal color on hover */
+.partner-card {
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.partner-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 30px -16px rgba(214, 0, 0, .25);
+  border-color: rgba(214, 0, 0, .25);
+}
+
+/* Featured product card: zoom + corner-morph hover */
+.product-card-inner {
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1), box-shadow .5s ease, border-radius .7s ease;
+}
+.product-card:hover .product-card-inner {
+  transform: translateY(-6px);
+  border-radius: 1.75rem 0.75rem 1.75rem 0.75rem;
+  box-shadow: 0 18px 30px -16px rgba(0, 0, 0, .25);
+}
+.product-card-img img {
+  transition: transform .9s cubic-bezier(.22, 1, .36, 1);
+}
+.product-card:hover .product-card-img img {
+  transform: scale(1.12) rotate(1.5deg);
+}
+
+/* Card-stack hover: two faint "ghost" cards peek out from behind, rotated,
+   as if there's a stack of product cards underneath. */
+.product-card-ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, #D60000, #A00000);
+  border: 1px solid rgba(214, 0, 0, .4);
+  opacity: 0;
+  transform: scale(.92) rotate(0deg) translate(0, 0);
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .45s ease;
+}
+.product-card:hover .product-card-ghost-1 {
+  opacity: 1;
+  transform: scale(.97) rotate(-7deg) translate(-6px, 6px);
+}
+.product-card:hover .product-card-ghost-2 {
+  opacity: 1;
+  transform: scale(.94) rotate(8deg) translate(7px, 9px);
+  transition-delay: .04s;
+}
+
+/* Instagram gallery tiles */
+.ig-card {
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.ig-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 28px -16px rgba(0, 0, 0, .4);
+}
+
+/* Home category tiles */
+.category-card {
+  box-shadow: 0 18px 30px -18px rgba(0, 0, 0, .35);
+  transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s ease;
+}
+.category-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 28px 45px -16px rgba(0, 0, 0, .45);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hero overlay readability */
+.hero-overlay {
+  background: linear-gradient(90deg, rgba(0, 0, 0, .65) 0%, rgba(0, 0, 0, .25) 60%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* Full-page loader: spinning dual rings around a pulsing logo */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: opacity .5s ease, visibility .5s ease;
+}
+.page-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.page-loader-inner {
+  position: relative;
+  display: flex;
+  height: 6.5rem;
+  width: 6.5rem;
+  align-items: center;
+  justify-content: center;
+}
+.page-loader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 3px solid transparent;
+}
+.page-loader-ring-1 {
+  border-top-color: #D60000;
+  border-right-color: #D60000;
+  animation: page-loader-spin 1s linear infinite;
+}
+.page-loader-ring-2 {
+  inset: 10px;
+  border-bottom-color: rgba(214, 0, 0, .35);
+  border-left-color: rgba(214, 0, 0, .35);
+  animation: page-loader-spin 1.4s linear infinite reverse;
+}
+.page-loader-logo {
+  position: relative;
+  z-index: 1;
+  height: 2.75rem;
+  width: 2.75rem;
+  object-fit: contain;
+  animation: page-loader-pulse 1.3s ease-in-out infinite;
+}
+.page-loader-logo-text {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #D60000;
+  color: #fff;
+  font-family: 'Sora', 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: .85rem;
+}
+
+@keyframes page-loader-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes page-loader-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(.86); opacity: .7; }
+}
+
+/* Rich-text content rendered from TinyMCE (product/recipe/article descriptions).
+   No @tailwindcss/typography plugin installed, so style the common elements
+   TinyMCE actually outputs (blocks, bold/italic, lists, links, tables, images). */
+.prose {
+  line-height: 1.7;
+}
+/* TinyMCE often bakes inline font-family/font-size onto elements (its own
+   defaults, or leftovers from pasted Word/Docs content) — those inline
+   styles outrank any class selector, so the rendered text drifts from the
+   site's actual type system. Force everything back to the template fonts. */
+.prose, .prose * {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+}
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose li, .prose td, .prose th, .prose span, .prose div {
+  font-size: 1em !important;
+  line-height: 1.7 !important;
+}
+.prose p { margin: 0 0 1em; }
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  font-family: 'Sora', 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin: 1.4em 0 .6em;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.prose h1 { font-size: 1.65em !important; font-weight: 800; }
+.prose h2 { font-size: 1.4em !important; }
+.prose h3 { font-size: 1.2em !important; }
+.prose h4 { font-size: 1.05em !important; }
+.prose h5, .prose h6 { font-size: 1em !important; }
+.prose strong, .prose b { font-weight: 700; color: #1A1A1A; }
+.prose em, .prose i { font-style: italic; }
+.prose ul, .prose ol { margin: 0 0 1em; padding-left: 1.4em; }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose li { margin: .35em 0; }
+.prose li > ul, .prose li > ol { margin: .35em 0; }
+.prose a { color: #D60000; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.prose a:hover { color: #A00000; }
+.prose blockquote {
+  margin: 1em 0;
+  padding: .25em 1em;
+  border-left: 3px solid #D60000;
+  color: #6B7280;
+  font-style: italic;
+}
+.prose img { max-width: 100%; border-radius: .75rem; margin: 1em 0; }
+.prose table { width: 100%; margin: 1em 0; border-collapse: collapse; font-size: .92em; }
+.prose th, .prose td { border: 1px solid #E5E7EB; padding: .5em .75em; text-align: left; }
+.prose th { background: #FAFAFA; font-weight: 700; }
+.prose code {
+  background: #F3F4F6;
+  border-radius: .35em;
+  padding: .15em .4em;
+  font-size: .9em;
+}
+.prose pre {
+  background: #1A1A1A;
+  color: #F3F4F6;
+  border-radius: .6em;
+  padding: 1em;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+.prose pre code { background: transparent; padding: 0; }
+.prose hr { border: none; border-top: 1px solid #E5E7EB; margin: 1.5em 0; }
+
+/* Marketplace purchase buttons (product detail) */
+.marketplace-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  border-radius: 9999px;
+  border: 1px solid #ECECEC;
+  background: #fff;
+  padding: .35rem .85rem .35rem .35rem;
+  font-size: .7rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
+}
+.marketplace-btn:hover {
+  transform: translateY(-3px);
+  border-color: transparent;
+  background-color: #D60000;
+  color: #fff;
+  box-shadow: 0 14px 26px -14px rgba(214, 0, 0, .5);
+}
+.marketplace-btn-icon {
+  display: flex;
+  height: 1.5rem;
+  width: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(214, 0, 0, .08);
+  color: #D60000;
+  transition: background-color .25s ease, color .25s ease, transform .25s ease;
+}
+.marketplace-btn:hover .marketplace-btn-icon {
+  background: rgba(255, 255, 255, .2);
+  color: #fff;
+  transform: scale(1.1) rotate(-6deg);
+}
+.marketplace-btn-arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.marketplace-btn:hover .marketplace-btn-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Product search bar */
+.product-search-input {
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+
+/* Product type filter: interactive cards with icon + sliding arrow */
+.type-filter-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  overflow: hidden;
+  border-radius: .9rem;
+  border: 1px solid #ECECEC;
+  background: #fff;
+  padding: .65rem .9rem;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: #4B4B4B;
+  transition: transform .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease;
+}
+.type-filter-link:hover {
+  transform: translateX(3px);
+  border-color: rgba(214, 0, 0, .3);
+  box-shadow: 0 10px 20px -14px rgba(214, 0, 0, .35);
+  color: #D60000;
+}
+.type-filter-link.is-active {
+  border-color: transparent;
+  background: linear-gradient(135deg, #D60000, #A00000);
+  color: #fff;
+  box-shadow: 0 14px 24px -14px rgba(214, 0, 0, .55);
+}
+.type-filter-icon {
+  display: flex;
+  height: 1.85rem;
+  width: 1.85rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(214, 0, 0, .08);
+  color: #D60000;
+  transition: background-color .25s ease, color .25s ease, transform .25s ease;
+}
+.type-filter-link.is-active .type-filter-icon {
+  background: rgba(255, 255, 255, .2);
+  color: #fff;
+}
+.type-filter-link:hover .type-filter-icon {
+  transform: scale(1.1) rotate(-6deg);
+}
+.type-filter-arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.type-filter-link:hover .type-filter-arrow,
+.type-filter-link.is-active .type-filter-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Explore listing card: red ghost card behind on hover (diagonal slab shape,
+   distinct from the product/recipe ghost shapes elsewhere). */
+.explore-card {
+  transition: transform .35s ease, border-color .35s ease;
+}
+.explore-card-wrap:hover .explore-card {
+  transform: translateY(-4px);
+  border-color: rgba(214, 0, 0, .25);
+}
+.explore-card-ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 1rem;
+  background: linear-gradient(100deg, #D60000, #A00000);
+  opacity: 0;
+  transform: skewY(0deg) scale(.92) translate(0, 0);
+  transition: transform .4s cubic-bezier(.22, 1, .36, 1), opacity .4s ease;
+}
+.explore-card-wrap:hover .explore-card-ghost {
+  opacity: 1;
+  transform: skewY(-1.5deg) scale(.97) translate(6px, 8px);
+}
+.explore-read-more svg {
+  transition: transform .25s ease;
+}
+.explore-read-more:hover svg,
+.explore-card-wrap:hover .explore-read-more svg {
+  transform: translateX(4px);
+}
+
+/* "Jenis Explore" sidebar: pill nav distinct from the product type filter
+   (solid tab feel with a left accent bar instead of icon-circle pills). */
+.explore-type-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  border-radius: .75rem;
+  padding: .7rem .9rem .7rem 1.1rem;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: #4B4B4B;
+  background: transparent;
+  border-left: 3px solid transparent;
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease, padding-left .25s ease;
+}
+.explore-type-link:hover {
+  background: #FBF7F2;
+  color: #D60000;
+  padding-left: 1.3rem;
+}
+.explore-type-link.is-active {
+  background: linear-gradient(135deg, rgba(214,0,0,.08), rgba(214,0,0,.02));
+  color: #D60000;
+  border-left-color: #D60000;
+  font-weight: 700;
+}
+.explore-type-link-count {
+  margin-left: auto;
+  font-size: .7rem;
+  font-weight: 700;
+  color: #9CA3AF;
+}
+.explore-type-link.is-active .explore-type-link-count { color: #D60000; }
+
+/* Archives accordion list */
+.archive-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  border-radius: .6rem;
+  padding: .5rem .75rem;
+  font-size: .78rem;
+  color: #6B7280;
+  transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+.archive-link:hover {
+  background: #FBF7F2;
+  color: #D60000;
+  transform: translateX(2px);
+}
+.archive-link.is-active {
+  background: #D60000;
+  color: #fff;
+}
+.archive-link-count {
+  font-size: .68rem;
+  font-weight: 700;
+  opacity: .7;
+}
+
+/* ===== About page ===== */
+
+.about-profile-img img {
+  transition: transform .5s ease;
+}
+.about-profile-img:hover img {
+  transform: scale(1.02);
+}
+
+.vision-mission-card {
+  position: relative;
+  border-radius: 1.5rem;
+  border: 1px solid #ECECEC;
+  background: #fff;
+  padding: 2rem;
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.vision-mission-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 40px -22px rgba(214, 0, 0, .3);
+  border-color: rgba(214, 0, 0, .25);
+}
+.vision-mission-icon {
+  display: inline-flex;
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: rgba(214, 0, 0, .08);
+  color: #D60000;
+  margin-bottom: 1rem;
+  transition: transform .35s ease, background-color .35s ease;
+}
+.vision-mission-card:hover .vision-mission-icon {
+  transform: rotate(-6deg) scale(1.1);
+  background: #D60000;
+  color: #fff;
+}
+
+/* ===== Contact page ===== */
+.about-info-icon {
+  display: flex;
+  height: 1.85rem;
+  width: 1.85rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(214, 0, 0, .08);
+  color: #D60000;
+}
+
+/* ===== Distribution map modal (About page) ===== */
+.distribution-modal {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease;
+}
+.distribution-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.distribution-modal-card {
+  transform: scale(.92) translateY(14px);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.22, .9, .3, 1.2), opacity .3s ease;
+}
+.distribution-modal.is-open .distribution-modal-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+@keyframes distribution-chip-in {
+  from { opacity: 0; transform: translateY(6px) scale(.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.distribution-chip {
+  opacity: 0;
+  animation: distribution-chip-in .35s ease forwards;
+}
